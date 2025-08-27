@@ -1,0 +1,146 @@
+*****************************************************
+/* 
+This Script contains a Stored procedure which Insert The data From csv Files 
+By truncationg the data First And Updating It later 
+It Will also used for perfomace metrix as this will Show How much time it takes 
+To load the data in tables 
+
+*/
+
+
+
+****************************************************
+use DataWareHouse
+go
+
+Create or alter procedure bronze.load_data_bronze as 
+begin
+  declare @starttime datetime,@endtime datetime,@startTimeBronzelayer datetime,@EndTimeBronzelayer datetime; 
+    set @startTimeBronzelayer = GETDATE();
+	begin try
+		Print ' ********************  '
+		Print ' CRM Tables  '
+		Print ' ********************  '
+	    set @starttime = GETDATE();
+		Print '>>  Truncating table: bronze.crm_cust_info'
+		Truncate table bronze.crm_cust_info
+		Print '>>  Inserting into: bronze.crm_cust_info'
+		Bulk insert bronze.crm_cust_info
+		from 'C:\Users\92192\OneDrive\Desktop\sql-data-warehouse-project\datasets\source_crm\cust_info.csv'
+		with
+		(
+		 firstrow=2,
+		 fieldterminator = ',',
+		 Tablock
+
+		)
+		set @endtime = GETDATE();
+
+		print 'Loading Time '+ cast(datediff(second,@starttime,@endtime)as nvarchar)
+
+
+		set @starttime = GETDATE();
+		Print '>>  Truncating table: bronze.crm_prd_info'
+		Truncate table bronze.crm_prd_info
+		Print '>>  Inserting into: bronze.crm_prd_info'
+		Bulk insert bronze.crm_prd_info
+		from 'C:\Users\92192\OneDrive\Desktop\sql-data-warehouse-project\datasets\source_crm\prd_info.csv'
+		with
+		(
+		 firstrow=2,
+		 fieldterminator = ',',
+		 Tablock
+
+		)
+		set @endtime = GETDATE();
+		print 'Loading Time '+ cast(datediff(second,@starttime,@endtime)as nvarchar)
+
+
+
+		set @starttime = GETDATE();
+		Print '>>  Truncating table: bronze.crm_sales_details'
+		Truncate table bronze.crm_sales_details
+		Print '>>  Inserting into: bronze.crm_sales_details'
+    
+		Bulk insert bronze.crm_sales_details
+		from 'C:\Users\92192\OneDrive\Desktop\sql-data-warehouse-project\datasets\source_crm\sales_details.csv'
+		with
+		(
+		 firstrow=2,
+		 fieldterminator = ',',
+		 Tablock
+
+		)
+
+		set @endtime = GETDATE();
+		print 'Loading Time '+ cast(datediff(second,@starttime,@endtime)as nvarchar)
+
+		Print ' ********************  '
+		Print ' ERP Tables  '
+		Print ' ********************  '
+
+		set @starttime = GETDATE();
+		Print '>>  Truncating table: bronze.erp_cust_az12'
+		Truncate table bronze.erp_cust_az12
+		Print '>>  Inserting into: bronze.erp_cust_az12'
+		Bulk insert bronze.erp_cust_az12
+		from 'C:\Users\92192\OneDrive\Desktop\sql-data-warehouse-project\datasets\source_erp\CUST_AZ12.csv'
+		with
+		(
+		 firstrow=2,
+		 fieldterminator = ',',
+		 Tablock
+
+		)
+		set @endtime = GETDATE();
+		print 'Loading Time '+ cast(datediff(second,@starttime,@endtime)as nvarchar)
+
+
+		set @starttime = GETDATE();
+		Print '>>  Truncating table: bronze.erp_loc_a101'
+		Truncate table bronze.erp_loc_a101
+		Print '>>  Inserting into: bronze.erp_loc_a101'
+		Bulk insert bronze.erp_loc_a101
+		from 'C:\Users\92192\OneDrive\Desktop\sql-data-warehouse-project\datasets\source_erp\LOC_A101.csv'
+		with
+		(
+		 firstrow=2,
+		 fieldterminator = ',',
+		 Tablock
+
+		)
+		set @endtime = GETDATE();
+		print 'Loading Time '+ cast(datediff(second,@starttime,@endtime)as nvarchar)
+
+        set @starttime = GETDATE();
+		Print '>>  Truncating table: bronze.erp_px_cat_g1v2'
+		Truncate table bronze.erp_px_cat_g1v2
+		Print '>>  Inserting into: bronze.erp_px_cat_g1v2'
+		Bulk insert bronze.erp_px_cat_g1v2
+		from 'C:\Users\92192\OneDrive\Desktop\sql-data-warehouse-project\datasets\source_erp\PX_CAT_G1V2.csv'
+		with
+		(
+		 firstrow=2,
+		 fieldterminator = ',',
+		 Tablock
+
+		)
+
+	    set @endtime = GETDATE();
+		print 'Loading Time '+ cast(datediff(second,@starttime,@endtime)as nvarchar)
+		set @EndTimeBronzelayer=GETDATE()
+
+		Print'+++++++++++++++++++'
+		print'Loading Time For Bronze Layer : '+cast( datediff(second,@startTimeBronzelayer,@EndTimeBronzelayer)as Nvarchar)
+		Print'+++++++++++++++++++'
+
+	end try
+	begin catch 
+	 print 'error message  : '+ error_message()
+	  print 'error Number   : '+ cast(error_number()as nvarchar)
+	  print 'error state  : '+ cast(error_state() as nvarchar)
+	end catch
+
+
+end
+
