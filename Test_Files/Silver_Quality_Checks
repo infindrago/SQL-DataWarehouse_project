@@ -1,0 +1,34 @@
+select  cst_gndr from silver.crm_cust_info
+
+
+--This query is to Find The mising Space in data and make sure That there are no trailing spaces 
+select cst_firstname from silver.crm_prd_info
+where cst_firstname !=trim(cst_firstname)
+
+
+select cst_lastname from silver.crm_cust_info
+where cst_lastname !=trim(cst_lastname)
+
+
+select count(*)as TotalCoount,sls_cust_id from silver.crm_sales_details
+group by sls_cust_id
+having  count(*)>1 or sls_cust_id is null
+
+
+select * from silver.crm_cust_info
+where cst_id=29449
+
+select prd_nm from bronze.crm_prd_info
+where prd_nm !=trim(prd_nm)
+
+select prd_cost from silver.crm_prd_info
+where prd_cost<0 or prd_cost is null
+
+select * from silver.crm_prd_info 
+where prd_start_dt>prd_end_dt
+
+
+select sls_cust_id from bronze.crm_sales_details
+where sls_cust_id not in (select cst_id from silver.crm_cust_info )
+
+select * from silver.crm_cust_info
