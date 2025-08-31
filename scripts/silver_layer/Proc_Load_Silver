@@ -1,4 +1,11 @@
+*****************************************************
+/* 
+This Script contains a Stored procedure which Insert The data From csv Files 
+By truncationg the data First And Updating It later 
+It Will also used for perfomace metrix as this will Show How much time it takes 
+To load the data in tables 
 
+*/
 
 
 
