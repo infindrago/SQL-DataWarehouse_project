@@ -1,5 +1,14 @@
+////////////////////////////////////
+/*This Script Creates All the required Tables.
+  It checks the table if it exist and Update it by 
+  droping it and recreating it 
 
-
+ ///////////
+ Warning 
+ use With caution as it Will Drop the table First
+ and you will lose all the data 
+*/
+//////////////////////////////////
 
 use DataWareHouse
 go
